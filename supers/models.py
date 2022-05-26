@@ -1,6 +1,4 @@
-from pyexpat import model
 from django.db import models
-
 from super_types.models import SuperType
 
 # Create your models here.
