@@ -12,8 +12,14 @@ from .serializers import SuperSerializer
 class Supers_List(APIView):
     #gets all supers and returns JSON formatted response
     def get(self, request, format = None):
-        super = Super.objects.all()
-        serializer = SuperSerializer(super, many = True)
+        supers = Super.objects.all()
+
+        super_param = request.query_params.get('type')
+
+        if super_param:
+            supers = supers.filter(super_type__type=super_param)
+
+        serializer = SuperSerializer(supers, many = True)
         return Response(serializer.data, status = status.HTTP_200_OK)
 
     #creates new super 
