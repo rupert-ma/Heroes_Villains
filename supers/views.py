@@ -6,7 +6,6 @@ from rest_framework import status
 from rest_framework.views import APIView
 from .models import Super
 from .serializers import SuperSerializer
-from supers import serializers
 
 # Create your views here.
 
@@ -43,4 +42,9 @@ class Supers_Detail(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_200_OK)
+    
+    def delete(self, request, pk, format=None):
+        super = self.get_object(pk)
+        super.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
