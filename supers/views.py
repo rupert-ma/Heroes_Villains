@@ -18,9 +18,19 @@ class Supers_List(APIView):
 
         if super_param:
             supers = supers.filter(super_type__type=super_param)
-
-        serializer = SuperSerializer(supers, many = True)
-        return Response(serializer.data, status = status.HTTP_200_OK)
+        
+        #create a dictionary
+        supers_dictionary = {}
+        #loop through the supers object
+        for super in supers:
+            #filters the supers object for the super_type_id
+            super_types = Super.objects.filter(super_type__type=super.super_type.type)
+            #serilizes the supers object into JSON
+            serializer = SuperSerializer(super_types, many = True)
+            #assigns the serialized data to the dictionary
+            supers_dictionary[super.super_type.type]=serializer.data
+            
+        return Response(supers_dictionary, status = status.HTTP_200_OK)
 
     #creates new super 
     def post(self, request, format = None):
