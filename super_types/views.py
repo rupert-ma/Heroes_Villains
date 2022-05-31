@@ -36,4 +36,16 @@ class Super_Type_Detail(APIView):
         super_type = self.get_object(pk)
         serializer = SuperTypeSerializer(super_type)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request, pk, format = None):
+        super_type = self.get_object(pk)
+        serializer = SuperTypeSerializer(super_type, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=status.HTTP_200_OK)
+
+    def delete(self, request, pk, format=None):
+        super_type = self.get_object(pk)
+        super_type.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
     
