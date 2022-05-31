@@ -1,3 +1,4 @@
+from tkinter.messagebox import NO
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
@@ -30,3 +31,9 @@ class Super_Type_Detail(APIView):
             return SuperType.objects.get(pk=pk)
         except SuperType.DoesNotExist:
             raise Http404
+    
+    def get(self, request, pk, format = None):
+        super_type = self.get_object(pk)
+        serializer = SuperTypeSerializer(super_type)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
