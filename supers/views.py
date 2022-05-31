@@ -23,7 +23,7 @@ class Supers_List(APIView):
         supers_dictionary = {}
         #loop through the supers object
         for super in supers:
-            #filters the supers object for the super_type_id
+            #filters the supers object for the super_type
             super_types = Super.objects.filter(super_type__type=super.super_type.type)
             #serilizes the supers object into JSON
             serializer = SuperSerializer(super_types, many = True)
