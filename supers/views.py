@@ -1,10 +1,12 @@
+from functools import partial
+from unicodedata import name
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from .models import Super
+from .models import Power, Super
 from .serializers import SuperSerializer
 
 # Create your views here.
@@ -63,4 +65,35 @@ class Supers_Detail(APIView):
         super = self.get_object(pk)
         super.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    def patch(self, request, pk, format=None):
+        super = self.get_object(pk)
+        power_param = request.query_params.get('id')
+        power = Power.objects.get(id=power_param)
+        
+        
 
+        serializer = SuperSerializer(data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+
+"""
+I was not able to solve the bonus question: steps I attempted:
+- create power model
+- migrated model, and registered with admin site. table was created and seeded with powers
+- in the Super model I replaced the primary and secondary ability with manytomany field, pointing to the Power model. initially received a E304 Reverse accessor error, I 
+assume this was fixed adding relative names to the line of code.
+- I then built a patch method that
+    - gets the super object by primary key
+    - then gets the parameter from the URL
+    - then gets the power object by id provided in the param
+    
+    - serializing the data is where I think I am missing something. I have tried many things, and googled quite a bit not identifying what is missing from my serializer. 
+    Or if the error is with the relative names chosen. or both.
+        - I reviewed the slides, and the django tutorial. As well as some other sites that popped up during the search. 
+
+"""
